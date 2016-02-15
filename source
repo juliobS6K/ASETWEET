@@ -1,1 +1,42 @@
+api tweet
 
+import oauth2 as oauth
+import urllib2 as urllib
+
+API_KEY = 'RUqLKPA1pfE714QXeIIb8bPcM'
+API_SECRET = 'XA0Tic66lXt0NBh8GJfHJHpm9jctf347KaD93VcX1iXVa5ORlR'
+ACCESS_TOKEN_KEY = '235992825-dWRG1LUuvjOoKSdLdH7c0BhX7gUxzfkX1C9Q7pT3'
+ACCESS_TOKEN_SECRET = 'QuXlKu7r36AVekq9DHt9aHJePvUNys3UtHErwNJtj5nAJ'
+
+oauth_token    = oauth.Token(key=235992825-dWRG1LUuvjOoKSdLdH7c0BhX7gUxzfkX1C9Q7pT3, secret=QuXlKu7r36AVekq9DHt9aHJePvUNys3UtHErwNJtj5nAJ)
+oauth_consumer = oauth.Consumer(key=RUqLKPA1pfE714QXeIIb8bPcM, secret=XA0Tic66lXt0NBh8GJfHJHpm9jctf347KaD93VcX1iXVa5ORlR)
+signature_method_hmac_sha1 = oauth.SignatureMethod_HMAC_SHA1()
+http_handler  = urllib.HTTPHandler(debuglevel=0)
+https_handler = urllib.HTTPSHandler(debuglevel=0)
+
+def build_req(url, method, params):
+  req = oauth.Request.from_consumer_and_token(
+    oauth_consumer, token=oauth_token, http_method=method, http_url=url,
+    parameters=params
+  )
+
+  req.sign_request(signature_method_hmac_sha1, oauth_consumer, oauth_token)
+  opener = urllib.OpenerDirector()
+  opener.add_handler(http_handler)
+  opener.add_handler(https_handler)
+  response = opener.open(req.to_url(), None)
+
+  return response
+
+def fetch():
+  url = "https://stream.twitter.com/1/statuses/sample.json"
+
+  response = build_req(url, 'GET', [])
+  for line in response:
+     print line.strip()
+
+if api_twitter == '__main__':
+  fetch()
+  
+  
+  
